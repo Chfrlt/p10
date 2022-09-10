@@ -18,9 +18,8 @@ class RegisterAPIView(APIView):
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request, *args,  **kwargs):
-        user = request.data
-        serializer = UserSerializer(data=user)
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
