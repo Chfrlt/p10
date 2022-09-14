@@ -1,6 +1,5 @@
 from rest_framework import viewsets, permissions
-from rest_framework.response import Response
-from django.shortcuts import render
+from django.contrib.auth.models import User
 
 from .models import Contributor
 from .serializers import ContributorSerializer
@@ -16,21 +15,12 @@ class ContributorViewSet(viewsets.ModelViewSet):
         IsContributor,
     ]
 
-    def create_contributor(self, serializer, **kwargs):
-        """Add a contributor to a specific project."""
+    def perform_create(self, serializer, **kwargs):
+        """Add a contributor to a specified project."""
+        user_id = User.objects.get(username=self.request.POST['user']).id
         project_pk = Project.objects.get(pk=self.kwargs["project_pk"])
-        serializer.save(project=project_pk)
+        serializer.save(project=project_pk, user_id=user_id)
 
     def get_contributors(self, **kwargs):
         """Display the contributors of a project."""
         return Contributor.objects.filter(project=self.kwargs["project_pk"])
-
-    def create(self, request, *args, **kwargs):
-        """Add a contributor without specifying the project."""
-        datas = request.data.copy()
-        datas.__setitem__("project", self.kwargs["project_pk"])
-        serializer = self.get_serializer(data=datas)
-        serializer.is_valid(raise_exception=True)
-        self.create_contributor(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, headers=headers)

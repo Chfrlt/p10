@@ -5,7 +5,6 @@ from .serializers import ProjectSerializer
 from .models import Project
 from contributors.models import Contributor
 from softdeck_api.permissions import IsProjectAuthor
-# Create your views here.
 
 
 class ProjectViewSet(ModelViewSet):
@@ -23,9 +22,9 @@ class ProjectViewSet(ModelViewSet):
         Display a list of projects in which
         the user is either the author or a contributor.
         """
-        contributors = Contributor.objects.filter(username=self.request.user)
+        contributors = Contributor.objects.filter(user_id=self.request.user.id)
         projects = [contributor.project.id for contributor in contributors]
         return Project.objects.filter(id__in=projects)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(author_user_id=self.request.user)

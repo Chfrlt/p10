@@ -7,7 +7,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = "__all__"
-        read_only_fields = ["author"]
+        read_only_fields = ["author_user_id"]
     
     def create(self, validated_data):
         """
@@ -15,11 +15,12 @@ class ProjectSerializer(serializers.ModelSerializer):
         The creator is also the first contributor.
         """
         new_project = Project.objects.create(**validated_data)
-        new_project.author_user_id = self.context["request"].user.id
+        new_project.author_user_id = self.context["request"].user
         new_project.save()
         Contributor.objects.create(
-            user=self.context["request"].user,
+            user_id=self.context["request"].user.id,
             project=new_project,
             role="Team leader"
         )
-        return
+        return new_project
+
