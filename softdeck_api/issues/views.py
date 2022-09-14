@@ -3,11 +3,10 @@ from rest_framework.viewsets import ModelViewSet
 
 from project.models import Project
 from softdeck_api.permissions import IsProjectAuthor, IsContributor
-
 from .models import Issue
 from .serializers import IssueSerializer
 
-# Create your views here.
+
 class IssueViewSet(ModelViewSet):
     """API endpoint for issues to be viewed or edited."""
 
@@ -23,11 +22,10 @@ class IssueViewSet(ModelViewSet):
         """Create an issue for specified project."""
         project_pk = Project.objects.get(pk=self.kwargs["project_pk"])
         serializer.save(
-            project=project_pk,
-            author=self.request.user,
-            assignee_user=self.request.user,
+            project_id=project_pk,
+            author_user_id=self.request.user,
         )
 
     def get_queryset(self, **kwargs):
         """Display a list of issues for specified project."""
-        return Issue.objects.filter(project=self.kwargs["project_pk"])
+        return Issue.objects.filter(project_id=self.kwargs["project_pk"])
