@@ -9,8 +9,8 @@ class IsProjectAuthor(permissions.BasePermission):
     message = "Only possible if author"
 
     def has_object_permission(self, request, view, object):
-        if request.method in ["PUT", "PATCH", "DELETE"]:
-            return request.user == object.author
+        if request.method == "PUT" or request.method == "PATCH" or request.method == "DELETE":
+            return request.user == object.author_user_id
         return True
 
 class IsContributor(permissions.BasePermission):
@@ -21,7 +21,7 @@ class IsContributor(permissions.BasePermission):
     def has_permission(self, request, view):
         project_pk = view.kwargs.get("project_pk")
         try:
-            Contributor.objects.get(user=request.user, project=project_pk)
+            Contributor.objects.get(user_id=request.user.id, project=project_pk)
         except Contributor.DoesNotExist:
             return False
         return True

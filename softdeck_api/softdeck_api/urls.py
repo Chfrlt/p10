@@ -16,18 +16,18 @@ router = DefaultRouter()
 router.register('projects', ProjectViewSet, basename='projects')
 
 project_router = NestedSimpleRouter(router, r'projects', lookup='project')
-project_router.register(r"users", ContributorViewSet, basename="user")
-project_router.register(r"issues", IssueViewSet, basename="issue")
+project_router.register(r'users', ContributorViewSet, basename='users')
+project_router.register(r'issues', IssueViewSet, basename='issues')
 
-issue_router = NestedSimpleRouter(project_router, r"issues", lookup="issue")
-issue_router.register(r"comments", CommentViewSet, basename="comment")
+issue_router = NestedSimpleRouter(project_router, r'issues', lookup='issues')
+issue_router.register(r'comments', CommentViewSet, basename='comments')
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", include(router.urls)),
-    path("", include(project_router.urls)),
-    path("", include(issue_router.urls)),
-    path("signup/", RegisterAPIView.as_view()),
-    path("login/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/token/refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"),
+    path('admin/', admin.site.urls),
+    path('', include(router.urls)),
+    path('', include(project_router.urls)),
+    path('', include(issue_router.urls)),
+    path('signup/', RegisterAPIView.as_view()),
+    path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]
