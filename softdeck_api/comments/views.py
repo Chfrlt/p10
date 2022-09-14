@@ -7,7 +7,6 @@ from .models import Comment
 from .serializers import CommentSerializer
 
 
-# Create your views here.
 class CommentViewSet(ModelViewSet):
     """API endpoint for comments to be viewed or edited."""
 
@@ -21,10 +20,10 @@ class CommentViewSet(ModelViewSet):
 
     def perform_create(self, serializer, **kwargs):
         """Create a comment for specified issue."""
-        issue_pk = Issue.objects.get(pk=self.kwargs["issue_pk"])
-        author_comment = self.request.user
-        serializer.save(issue=issue_pk, author=author_comment)
+        issue = Issue.objects.get(pk=self.kwargs["issues_pk"])
+        comment_author = self.request.user
+        serializer.save(issue_id=issue, author_user_id=comment_author)
 
     def get_queryset(self, **kwargs):
         """Display comments list for specified issue."""
-        return Comment.objects.filter(issue=self.kwargs["issue_pk"])
+        return Comment.objects.filter(issue_id=self.kwargs["issues_pk"])

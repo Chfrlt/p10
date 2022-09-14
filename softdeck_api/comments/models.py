@@ -2,10 +2,10 @@ from django.db import models
 from django.conf import settings
 from issues.models import Issue
 
-# Create your models here.
+
 class Comment(models.Model):
-    body = models.CharField(max_length=255)
-    author = models.ForeignKey(
+    description = models.CharField(max_length=255)
+    author_user_id = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         related_name='comments',
         on_delete=models.CASCADE,
@@ -21,4 +21,4 @@ class Comment(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Issue : {self.issue_id.title}, Comment : {self.body}, Author : {self.author}"
+        return f"Issue : {self.issue_id.title}, Comment : {self.description}, Author : {self.author_user_id}"
