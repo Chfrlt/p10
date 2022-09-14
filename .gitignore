@@ -1,2 +1,4 @@
 env
 softdeck_api/db.sqlite3
+softdeck_api/softdeck_api/.env
+.vscode
