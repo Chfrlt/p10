@@ -4,13 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 
 from rest_framework import serializers
 
-'''
-user_id,     -> IntegerField 
-first_name,   -> Charfield 
-last_name,    -> Charfield
-email,        -> EmailField
-password      -> Charfield
-'''
+
 class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -22,7 +16,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         if validate_password(validated_data['password']) is None:
-            validated_data['password'] = make_password(validated_data['password'])
+            validated_data['password'] = (
+                make_password(validated_data['password'])
+                )
         user = User.objects.create(**validated_data)
         return user
-

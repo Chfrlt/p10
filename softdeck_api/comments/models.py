@@ -9,16 +9,19 @@ class Comment(models.Model):
         to=settings.AUTH_USER_MODEL,
         related_name='comments',
         on_delete=models.CASCADE,
-        blank=True, null=True
+        blank=True, null=False
         )
     issue_id = models.ForeignKey(
         Issue,
         related_name='comments',
         on_delete=models.CASCADE,
         blank=True,
-        null=True
+        null=False
         )
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Issue : {self.issue_id.title}, Comment : {self.description}, Author : {self.author_user_id}"
+        return (
+            "Issue : {}, Comment : {}, Author : {}"
+            .format(self.issue_id.title, self.description, self.author_user_id)
+            )

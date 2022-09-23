@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Issue
 
+
 class IssueSerializer(serializers.ModelSerializer):
 
     assignee_user = serializers.SlugRelatedField(
@@ -10,7 +11,6 @@ class IssueSerializer(serializers.ModelSerializer):
         read_only=False,
         slug_field='username'
     )
-
 
     class Meta:
         model = Issue

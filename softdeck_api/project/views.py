@@ -1,10 +1,12 @@
 from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
+from rest_framework import status
 
 from .serializers import ProjectSerializer
 from .models import Project
 from contributors.models import Contributor
-from softdeck_api.permissions import IsProjectAuthor
+from softdeck_api.permissions import IsAuthor
 
 
 class ProjectViewSet(ModelViewSet):
@@ -14,7 +16,7 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
     permission_classes = [
         permissions.IsAuthenticated,
-        IsProjectAuthor,
+        IsAuthor,
     ]
 
     def get_queryset(self, *args, **kwargs):
@@ -28,3 +30,11 @@ class ProjectViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author_user_id=self.request.user)
+
+    def destroy(self, instance, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({
+            "message":"Deleted successfully"
+        },
+        status=status.HTTP_200_OK)

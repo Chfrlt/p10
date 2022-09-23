@@ -1,8 +1,10 @@
 from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
+from rest_framework import status
 
 from project.models import Project
-from softdeck_api.permissions import IsProjectAuthor, IsContributor
+from softdeck_api.permissions import IsAuthor, IsContributor
 from .models import Issue
 from .serializers import IssueSerializer
 
@@ -14,7 +16,7 @@ class IssueViewSet(ModelViewSet):
     serializer_class = IssueSerializer
     permission_classes = [
         permissions.IsAuthenticated,
-        IsProjectAuthor,
+        IsAuthor,
         IsContributor,
     ]
 
@@ -29,3 +31,9 @@ class IssueViewSet(ModelViewSet):
     def get_queryset(self, **kwargs):
         """Display a list of issues for specified project."""
         return Issue.objects.filter(project_id=self.kwargs["project_pk"])
+
+    def destroy(self, instance, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({"message":"Deleted successfully"},
+                        status=status.HTTP_200_OK)

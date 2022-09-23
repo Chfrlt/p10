@@ -1,10 +1,13 @@
 from rest_framework import viewsets, permissions
 from django.contrib.auth.models import User
+from rest_framework.response import Response
+from rest_framework import status
 
 from .models import Contributor
 from .serializers import ContributorSerializer
 from project.models import Project
 from softdeck_api.permissions import IsContributor
+
 
 class ContributorViewSet(viewsets.ModelViewSet):
 
@@ -24,3 +27,9 @@ class ContributorViewSet(viewsets.ModelViewSet):
     def get_contributors(self, **kwargs):
         """Display the contributors of a project."""
         return Contributor.objects.filter(project=self.kwargs["project_pk"])
+
+    def destroy(self, instance, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({"message":"Deleted successfully"},
+                        status=status.HTTP_200_OK)
