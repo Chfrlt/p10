@@ -9,14 +9,14 @@ class Comment(models.Model):
         to=settings.AUTH_USER_MODEL,
         related_name='comments',
         on_delete=models.CASCADE,
-        blank=True, null=False
+        blank=True, null=True
         )
     issue_id = models.ForeignKey(
         Issue,
         related_name='comments',
         on_delete=models.CASCADE,
         blank=True,
-        null=False
+        null=True
         )
     created_time = models.DateTimeField(auto_now_add=True)
 

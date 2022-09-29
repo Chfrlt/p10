@@ -33,20 +33,20 @@ class Issue(models.Model):
         max_length=50, choices=STATUS_CHOICES, blank=True, null=True)
     project_id = models.ForeignKey(
         Project, related_name='issues',
-        on_delete=models.CASCADE, blank=True, null=False)
+        on_delete=models.CASCADE, blank=True, null=True)
     author_user_id = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="author",
         blank=True,
-        null=False,
+        null=True,
         )
     assignee_user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="assignee_user",
         blank=True,
-        null=False
+        null=True
         )
     created_time = models.DateTimeField(auto_now_add=True)
 

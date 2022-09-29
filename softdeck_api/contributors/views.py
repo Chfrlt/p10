@@ -20,7 +20,7 @@ class ContributorViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer, **kwargs):
         """Add a contributor to a specified project."""
-        user_id = User.objects.get(username=self.request.POST['user']).id
+        user_id = User.objects.get(username=self.request.POST['user'])
         project_pk = Project.objects.get(pk=self.kwargs["project_pk"])
         serializer.save(project=project_pk, user_id=user_id)
 

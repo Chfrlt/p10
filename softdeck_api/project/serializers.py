@@ -18,7 +18,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         new_project.author_user_id = self.context["request"].user
         new_project.save()
         Contributor.objects.create(
-            user_id=self.context["request"].user.id,
+            user_id=self.context["request"].user,
             project=new_project,
             role="Team leader"
         )
